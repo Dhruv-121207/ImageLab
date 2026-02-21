@@ -71,7 +71,7 @@ def adjust_brightness(img_arr,slider):
 
 def adjust_contrast(img_arr,slider):
 
-    slider = np.clip(slider,-100,100)
+    slider = np.clip(slider,-50,100)
     factor = 1 + slider/100
 
     arr = img_arr.astype(np.float32)

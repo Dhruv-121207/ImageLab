@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ImageLab</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>ImageLab</h1>
+
+    <form method="POST" action="/upload" enctype="multipart/form-data" class="upload-part">
+        <input class="upload-image" type="file" name="image" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if image_exists %}
+
+    <div class="preview">
+
+        <form method="POST" action="/" class="sidebar">
+
+            <p class="section-title">Filters</p>
+
+            <div class="btn-group">
+                <button name="action" value="grayscale">Grayscale</button>
+                <button name="action" value="inversion">Inversion</button>
+                <button name="action" value="vertically">Flip Vertical</button>
+                <button name="action" value="horizontally">Flip Horizontal</button>
+                <button name="action" value="rotate_cw">Rotate CW</button>
+                <button name="action" value="rotate_acw">Rotate ACW</button>
+            </div>
+
+            <p class="section-title">Adjustments</p>
+
+           <label>Brightness</label>
+            <div class="slider-row">
+                <input type="range" name="brightness_value" max="100" min="-100" id="brightnessSlider">
+                <span id="brightnessNumber">0</span>
+            </div>
+            <button name="action" value="brightness" class="primary">Apply Brightness</button>
+
+            <label>Contrast</label>
+            <div class="slider-row">
+                <input type="range" name="contrast_value" max="100" min="-100" id="contrastSlider">
+                <span id="contrastNumber">0</span>
+            </div>
+            <button name="action" value="contrast" class="primary">Apply Contrast</button>
+
+        </form>
+
+        <div class="image-part">
+
+            <div class="comparison">
+                <div>
+                    <h3>Original</h3>
+                    <img src="{{ url_for('uploaded_file',filename='original.jpg') }}?t={{ timestamp }}">
+                </div>
+
+                <div>
+                    <h3>Edited</h3>
+                    <img src="{{ url_for('uploaded_file',filename='current.jpg') }}?t={{ timestamp }}">
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <form method="POST" action="/">
+                    <button class="reset" name="action" value="reset">Reset</button>
+                </form>
+
+                <a class="clear" href="?clear=1">Clear Everything</a>
+                <a class="download" href="/download">Download Edited Image</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
+
+<script>
+const brightnessSlider = document.getElementById("brightnessSlider");
+const brightnessNumber = document.getElementById("brightnessNumber");
+
+if (brightnessSlider) {
+    brightnessSlider.oninput = function() {
+        brightnessNumber.textContent = this.value;
+    };
+}
+
+const contrastSlider = document.getElementById("contrastSlider");
+const contrastNumber = document.getElementById("contrastNumber");
+
+if (contrastSlider) {
+    contrastSlider.oninput = function() {
+        contrastNumber.textContent = this.value;
+    };
+}
+</script>
